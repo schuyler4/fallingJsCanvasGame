@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Jumping game</title>
+	<style>
+		#canvas {
+			border: 2px solid black;
+			background: black;
+		}
+	</style>
+</head>
+<body>
+<canvas id="canvas" width="600" height="400"></canvas>
+<script>
+	var canvas = document.getElementById("canvas")
+	var ctx = canvas.getContext("2d")
+
+	var gameStart = false
+
+	document.addEventListener("click", function(){
+		if(gameStart == false) {
+			gameStart = true
+		}
+	},false)
+
+	function addStartText() {
+		if(gameStart == false) {
+			ctx.font="20px Arial"
+			ctx.fillText("Click to Start",canvas.width / 2 - 50,50)
+		}
+	}
+
+	var player = {
+		width:50,
+		height:50,
+		x:200,
+		y:canvas.height / 2 - 50 + 150,
+		color: "red",
+		movingUp: false,
+		movingDown: false,
+		draw: function() {
+			ctx.beginPath()
+			ctx.rect(this.x,this.y,this.width,this.height)
+			ctx.fillStyle = this.color
+			ctx.fill()
+			ctx.closePath()
+		},
+		move: function(e) {
+			if(gameStart == true) {
+				if(this.movingUp == true) {
+					this.y -= 2
+				}
+				else if(this.movingDown == true) {
+					this.y += 10
+				}
+			}
+		}
+	}
+	document.addEventListener("keydown",function(e){
+		if(gameStart == true) {
+			if(e.keyCode == 39) {
+				player.x += 15
+			}
+			else if(e.keyCode == 37) {
+				player.x -= 15
+			}
+		}
+	},false)
+	var platfourmColor = "white"
+	var platform1 = {
+		width: canvas.width / 2,
+		height: 50,
+		x:0,
+		y: canvas.height / 2 + 150,
+		draw: function() {
+			ctx.beginPath()
+			ctx.rect(this.x,this.y,this.width,this.height)
+			ctx.fillStyle = platfourmColor
+			ctx.fill()
+			ctx.closePath()
+		},
+		move: function() {
+			if(gameStart == true) {
+				this.y -= 2
+				if(this.y < -50) {
+					this.y = canvas.height + 50
+				}
+			}
+		}	
+
+	}
+	var platform2 = {
+		width: canvas.width / 2,
+		height: 50,
+		x:canvas.width/2,
+		y: canvas.height/2 + 150,
+		draw: function() {
+			ctx.beginPath()
+			ctx.rect(this.x,this.y,this.width,this.height)
+			ctx.fillStyle = platfourmColor
+			ctx.fill()
+			ctx.closePath()
+		},
+		move: function() {
+			if(gameStart == true) {
+				this.y -= 2
+				if(this.y < -50) {
+					this.y = canvas.height + 50
+				}
+			}
+		}
+	}
+
+	var countUp = 0
+
+	function draw() {
+		countUp += 1
+		ctx.clearRect(0, 0, canvas.width, canvas.height)
+		addStartText()
+		player.draw()
+		player.move()
+		platform1.draw()
+		platform2.draw()
+		platform1.move()
+		if(countUp >= 250){
+			platform2.move()
+		}
+	}
+	setInterval(draw,10)
+</script>
+</body>
+</html>
